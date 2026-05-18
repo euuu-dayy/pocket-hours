@@ -36,7 +36,7 @@ function ProfilePage() {
       ) {
 
         setImageUrl(
-          `https://localhost:7244${data.profileImageUrl}`
+          `${import.meta.env.VITE_API_URL.replace("/api", "")}${user.profileImageUrl}`
         );
       }
 
@@ -93,7 +93,7 @@ function ProfilePage() {
       );
 
       const fullImageUrl =
-        `https://localhost:7244${response.data.imageUrl}`;
+        `${import.meta.env.VITE_API_URL.replace("/api", "")}${user.profileImageUrl}`;
 
       setImageUrl(
         fullImageUrl

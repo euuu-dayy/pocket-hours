@@ -159,7 +159,7 @@ function ManageUsersPage() {
                     src={
                       user.profileImageUrl
                         ?
-                        `https://localhost:7244${user.profileImageUrl}`
+                        `${import.meta.env.VITE_API_URL.replace("/api", "")}${user.profileImageUrl}`
                         :
                         "https://cdn-icons-png.flaticon.com/512/149/149071.png"
                     }
