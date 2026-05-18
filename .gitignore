@@ -1,0 +1,14 @@
+# Visual Studio
+.vs/
+bin/
+obj/
+
+# Frontend
+pockethours.client/node_modules
+pockethours.client/dist
+
+# Environment
+appsettings.Development.json
+
+# Logs
+*.log
