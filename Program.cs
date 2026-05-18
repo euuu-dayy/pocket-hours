@@ -128,9 +128,9 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
+                .AllowAnyOrigin()
                 .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowAnyOrigin();
+                .AllowAnyMethod();
         }
     );
 });
@@ -152,9 +152,9 @@ app.UseHttpsRedirection();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
-app.UseStaticFiles();
-
 app.UseCors("AllowFrontend");
+
+app.UseStaticFiles();
 
 app.UseAuthentication();
 
