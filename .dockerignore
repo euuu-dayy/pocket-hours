@@ -1,4 +1,7 @@
 bin/
 obj/
 .vs/
+.git/
+
 pockethours.client/node_modules/
+pockethours.client/dist/
