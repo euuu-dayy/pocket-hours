@@ -131,7 +131,7 @@ builder.Services.AddCors(options =>
                 .WithOrigins(
                     "http://localhost:5173",
                     "https://localhost:5173",
-                    "https://pocket-hours-api.onrender.com/api"
+                    "https://pocket-hours.vercel.app"
                 )
                 .AllowAnyHeader()
                 .AllowAnyMethod();
