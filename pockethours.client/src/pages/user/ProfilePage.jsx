@@ -7,44 +7,29 @@ import { toast } from "react-toastify";
 import { getProfile } from "../../services/userService";
 
 function ProfilePage() {
+  const token = localStorage.getItem("token");
 
-  const token =
-    localStorage.getItem("token");
+  const [user, setUser] = useState(null);
 
-  const [user, setUser] =
-    useState(null);
+  const [file, setFile] = useState(null);
 
-  const [file, setFile] =
-    useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
 
-  const [imageUrl,
-    setImageUrl] =
-      useState(null);
-
-  const fetchProfile =
-    async () => {
-
+  const fetchProfile = async () => {
     try {
-
-      const data =
-        await getProfile();
+      const data = await getProfile();
 
       setUser(data);
 
-      if (
-        data.profileImageUrl
-      ) {
-
+      if (data.profileImageUrl) {
         setImageUrl(
-          `${import.meta.env.VITE_API_URL.replace("/api", "")}${user.profileImageUrl}`
+          `${import.meta.env.VITE_API_URL.replace("/api", "")}${data.profileImageUrl}`,
         );
       }
-
     } catch (error) {
+      console.log(error);
 
-      toast.error(
-        "Failed to load profile"
-      );
+      toast.error("Failed to load profile");
     }
   };
 
@@ -52,70 +37,45 @@ function ProfilePage() {
     fetchProfile();
   }, []);
 
-  const handleUpload =
-    async (e) => {
-
+  const handleUpload = async (e) => {
     e.preventDefault();
 
     if (!file) {
-
-      return toast.error(
-        "Select image"
-      );
+      return toast.error("Select image");
     }
 
-    const formData =
-      new FormData();
+    const formData = new FormData();
 
-    formData.append(
-      "file",
-      file
-    );
+    formData.append("file", file);
 
     try {
-
-      const response =
-        await axiosInstance.post(
-          "/Users/upload-profile-image",
-          formData,
-          {
-            headers: {
-              Authorization:
-                `Bearer ${token}`,
-              "Content-Type":
-                "multipart/form-data",
-            },
-          }
-        );
-
-      toast.success(
-        response.data.message
+      const response = await axiosInstance.post(
+        "/Users/upload-profile-image",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        },
       );
 
-      const fullImageUrl =
-        `${import.meta.env.VITE_API_URL.replace("/api", "")}${user.profileImageUrl}`;
+      toast.success("Image uploaded successfully");
 
-      setImageUrl(
-        fullImageUrl
-      );
+      const fullImageUrl = `${import.meta.env.VITE_API_URL.replace("/api", "")}${response.data.profileImageUrl}`;
+
+      setImageUrl(fullImageUrl);
 
       fetchProfile();
-
     } catch (error) {
-
-      toast.error(
-        "Upload failed"
-      );
+      toast.error("Upload failed");
     }
   };
 
   return (
     <div className="container mt-5">
-
       <div className="row justify-content-center">
-
         <div className="col-md-8">
-
           <div
             className="
               card
@@ -123,7 +83,6 @@ function ProfilePage() {
               border-0
             "
           >
-
             <div
               className="
                 bg-dark
@@ -132,7 +91,6 @@ function ProfilePage() {
                 p-4
               "
             >
-
               <div
                 className="
                   d-flex
@@ -140,11 +98,9 @@ function ProfilePage() {
                   mb-3
                 "
               >
-
                 <img
                   src={
-                    imageUrl
-                    ||
+                    imageUrl ||
                     "https://cdn-icons-png.flaticon.com/512/149/149071.png"
                   }
                   alt="Profile"
@@ -153,124 +109,69 @@ function ProfilePage() {
                     height: "120px",
                     objectFit: "cover",
                     borderRadius: "50%",
-                    border:
-                      "4px solid white",
+                    border: "4px solid white",
                   }}
                 />
-
               </div>
 
               <h3>
-                {user?.firstName}
-                {" "}
-                {user?.lastName}
+                {user?.firstName} {user?.lastName}
               </h3>
 
-              <p className="mb-0">
-                {user?.role}
-              </p>
-
+              <p className="mb-0">{user?.role}</p>
             </div>
 
             <div className="card-body p-4">
-
               <div className="row">
-
                 <div className="col-md-6 mb-3">
+                  <label className="fw-bold">First Name</label>
 
-                  <label className="fw-bold">
-                    First Name
-                  </label>
-
-                  <div className="form-control">
-                    {user?.firstName}
-                  </div>
-
+                  <div className="form-control">{user?.firstName}</div>
                 </div>
 
                 <div className="col-md-6 mb-3">
+                  <label className="fw-bold">Last Name</label>
 
-                  <label className="fw-bold">
-                    Last Name
-                  </label>
-
-                  <div className="form-control">
-                    {user?.lastName}
-                  </div>
-
+                  <div className="form-control">{user?.lastName}</div>
                 </div>
 
                 <div className="col-md-6 mb-3">
+                  <label className="fw-bold">Email</label>
 
-                  <label className="fw-bold">
-                    Email
-                  </label>
-
-                  <div className="form-control">
-                    {user?.email}
-                  </div>
-
+                  <div className="form-control">{user?.email}</div>
                 </div>
 
                 <div className="col-md-6 mb-3">
+                  <label className="fw-bold">Phone Number</label>
 
-                  <label className="fw-bold">
-                    Phone Number
-                  </label>
-
-                  <div className="form-control">
-                    {user?.phoneNumber}
-                  </div>
-
+                  <div className="form-control">{user?.phoneNumber}</div>
                 </div>
 
                 <div className="col-md-6 mb-3">
+                  <label className="fw-bold">Gender</label>
 
-                  <label className="fw-bold">
-                    Gender
-                  </label>
-
-                  <div className="form-control">
-                    {user?.gender}
-                  </div>
-
+                  <div className="form-control">{user?.gender}</div>
                 </div>
 
                 <div className="col-md-6 mb-3">
+                  <label className="fw-bold">City</label>
 
-                  <label className="fw-bold">
-                    City
-                  </label>
-
-                  <div className="form-control">
-                    {user?.city}
-                  </div>
-
+                  <div className="form-control">{user?.city}</div>
                 </div>
-
               </div>
 
               <hr />
 
-              <h5 className="mb-3">
-                Upload Profile Image
-              </h5>
+              <h5 className="mb-3">Upload Profile Image</h5>
 
-              <form
-                onSubmit={handleUpload}
-              >
-
+              <form onSubmit={handleUpload}>
                 <input
                   type="file"
                   className="
                     form-control
                     mb-3
                   "
-                  onChange={(e) =>
-                    setFile(
-                      e.target.files[0]
-                    )
-                  }
+                  onChange={(e) => setFile(e.target.files[0])}
                 />
 
                 <button
@@ -283,17 +184,11 @@ function ProfilePage() {
                 >
                   Upload Image
                 </button>
-
               </form>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
   );
 }
